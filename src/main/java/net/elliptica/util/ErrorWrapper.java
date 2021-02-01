@@ -2,6 +2,7 @@ package net.elliptica.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import sun.reflect.CallerSensitive;
 import sun.reflect.Reflection;
 
 import java.util.function.BiFunction;
@@ -44,8 +45,8 @@ public class ErrorWrapper {
 		RunCtx<E2, E2> or(Class<E2> erType2) throws CurExc, ExtExc;
 	}
 
-	public static <E extends Exception, E2 extends Exception, ExtExc extends Exception>
-	RunCtx<E, ExtExc> run(UnsafeRunnable2<E,E2> runnable) {
+	public static <E extends Exception, ExtExc extends Exception>
+	RunCtx<E, ExtExc> run(UnsafeRunnable<E> runnable) {
 		class RunCtxFree implements RunCtx<E, ExtExc> {
 			@Override
 			public RunCtx<E, ExtExc> catching(Class<E> t, String msg, BiFunction<String, E, ExtExc> conv) { return this; }
@@ -161,7 +162,7 @@ public class ErrorWrapper {
 					 Class<E1> erType1, String msg1, BiFunction<String, E, ExtExc> conv1,
 					 Class<E2> erType2, String msg2, BiFunction<String, E, ExtExc> conv2
 	) throws E, ExtExc {
-		final Log log = LogFactory.getLog(Reflection.getCallerClass());
+		final Log log = LogFactory.getLog(Reflection.getCallerClass(2));
 		ErrorWrapper wrapper = new ErrorWrapper(log);
 		wrapper.errorToWarn(runnable,
 			erType1, msg1, conv1,
