@@ -1,2 +1,2 @@
 # exceptioner
-Convenieent exception catcher/wrapper with fluent API
+Convenient exception catcher/wrapper with fluent API
